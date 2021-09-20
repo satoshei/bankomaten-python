@@ -1,84 +1,75 @@
+import sys, time, random
+
+
 user = {
     "balance": 0,
-    "account": " "
+    "account": 0
 }
 
-inlogged = False
-is_quit = False
-
-print("---------------")
-print("***HUVUDMENY***")
-print("---------------")
+print("--------------------------")
+print("***TEKNIKHÖGSKOLAN-BANK***")
+print("--------------------------")
 
 print("1. Skapa konto")
 print("2. Adminstrera konto")
 print("3. Avsluta")
+
 while True:
-    cmd = input("Ange menyval > ")
 
-    if cmd == "1":
-        account = input("Ange kontonummer > ")
-        user["account"] = account
-    elif user["account"] == user[" "]:
-        print("ERROR: Kontonummer finns redan, försök med nytt kontonummer")
-        input("Tryck enter för att komma tillbaka till meny!")
+    sel = input("Ange menyval > ")
+
+    if sel == "1":
+        print("Du skapar nu ett konto hos oss :)")
+        nmr = int(input("Ange ett kontonummer med fyra siffror: "))
+        while nmr < 1000 or nmr > 9999:
+            nmr = int(input("Ogiltigt kontonummer..Testa igen: "))
+        user["account"] = nmr
+        print("Ditt kontonummer kommer snart att visas på skärmen, \nvar snäll och skydda dina uppgifter")
+        time.sleep(2)
+        print("Kontonummer: ",user["account"])
     
-    elif cmd == "2":
-        account = input("Ange kontonummer > ")
-        if account not in user:
-            print("ERROR: Konto finns ej, försök igen")
-            input("Tryck enter för att komma tillbaka till meny!")
-    
-    elif cmd == "3":
-        print("***KONTOMENY***", "- Konto: ",user[" "])
-        print("1. Ta ut pengar")
-        print("2. Sätt in pengar")
-        print("3. Visa saldo")
-        print("4. Avsluta")
+    elif sel == "2":
+        nmr = int(input("Ange ett kontonummer med fyra siffror: "))
+        while nmr < 1000 or nmr > 9999:
+            nmr = int(input("Ogiltigt kontonummer..Testa igen: "))
+            user["account"] = nmr
+        else:
+            print("---------------")
+            print("***KONTOMENY*** - konto: ", nmr)
+            print("---------------")
+            print("1. Ta ut pengar")
+            print("2. Sätt in pengar")
+            print("3. Visa saldo")
+            print("4. Avsluta")
+            
+            while True:
 
-        cmd = input("Ange menyval > ")
+                sel = input("Ange menyval > ")
 
-        #w_amount = ta ut pengar variabel
-        #d_amocunt = sätt in pengar variabel
+                if sel == "1":
+                    belopp = int(input("Ange belopp för uttag: "))
+                    if belopp > user["balance"]:
+                        print("ERROR: För stort belopp för uttag ")
+                        input("Testa igenom genom att trycka 'enter' ")
+                    elif belopp <= user["balance"]:
+                        user["balance"] = user["balance"] - belopp
+                        print("Uttag godkänt du har nu",user["balance"], "kr kvar på ditt konto:",nmr)
+                
+                elif sel == "2":
+                    insätt = int(input("Ange belopp för insättning: "))
+                    user["balance"] = user["balance"] + insätt
+                    print("Arbetar...")
+                    time.sleep(2)
+                    print("Du har nu valt att göra en insättning på",insätt,"kr", "på kontonummer",nmr)
+                    print("Du har nu",user["balance"], "på ditt konto")
+                
+                elif sel == "3":
+                    print("Ditt saldo visas snart på skärmen, var snäll och skydda dina uppgifter")
+                    time.sleep(2)
+                    print(user["balance"], ":-")
 
-
-        if cmd == "1":
-            def withdraw_money():
-                try:
-                    w_amount = int(input("Hur mycket pengar vill du ta ut?"))
-                    if w_amount > user["balance"]:
-                        print("Medges ej!")
-                    else:
-                        user["balance"] = user["balance"] - w_amount
-                        print(f'{w_amount} har tagits ut från ditt konto: {account}, du har totalt {user["balance"]}') 
-                        print("")
-                except:
-                    print("Var snäll och ange ett nummer för uttag")
-
-        elif cmd == "2":
-            def deposit_money():
-                try:
-                    d_amount = int(input("Hur mycket pengar vill du lägga till: "))
-                    user["balance"] = user["balance"] + d_amount
-                    print(f'{d_amount} har suttits in i ditt konto: {account}, du har totalt {user["balance"]}')
-                    print("")
-                except:
-                    print("Var snäll och ange ett nummer för insättning")
-        
-        elif cmd == "3":
-            def s_balance():
-                print(f'Ditt saldo är {user["balance"]}')
-                print("")
-        
-        elif cmd == "4":
-            print("Nu avslutas bankomat ärendet, du loggas ut inom 2 sekunder")
-            print(".")
-            time.sleep(1)
-            print(".")
-            time.sleep(1)
-            print("Tack och Hejdå")
-            exit()
-
-    else:
-        print("ERROR: Ej valbart alternativ")
-        input("Tryck enter för att försöka igen")   
+                elif sel == "4":
+                    print("Transaktion är nu klart")
+                    print("Transaktionsnummer: ", random.randint(10000, 1000000))
+                    print("Tack för att du väljer oss som bank!")
+                    exit()
